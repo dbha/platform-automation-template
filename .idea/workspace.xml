@@ -20,37 +20,9 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="a74f0e74-944c-4ce7-98f1-3bfa4b4bdb8d" name="Default" comment="">
-      <change afterPath="$PROJECT_DIR$/envs/pks/generated-vars/healthwatch.yml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/envs/pez/download-products/healthwatch.yml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/envs/pez/download-products/opsman.yml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/envs/pez/download-products/pks.yml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/envs/pez/download-products/tas.yml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/envs/pez/generated-products/tas.yml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/envs/pez/generated-vars/tas.yml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/envs/pez/generated-vars/test.yml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/envs/pez/opsfiles/tas-operations" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/envs/pez/opsman/.gitkeep" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/envs/pez/opsman/auth-ldap.yml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/envs/pez/opsman/auth-saml.yml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/envs/pez/opsman/auth.yml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/envs/pez/opsman/director.yml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/envs/pez/opsman/env.yml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/envs/pez/opsman/opsman.yml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/envs/pez/pipeline-vars/params.yml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/envs/pez/pipeline-vars/set-credhub.sh" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/envs/pez/pipeline_trigger_version_pez-tas" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/envs/pez/products/pks.yml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/envs/pez/state/.gitkeep" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/envs/pez/state/state.yml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/envs/pez/vars/.gitkeep" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/envs/pez/vars/cf.yml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/envs/pez/vars/director.yml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/envs/pez/vars/opsman.yml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/envs/pez/vars/tas.yml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/envs/pez/vars/versions.yml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/envs/pez/versions.yml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/envs/pez/versions/opsman.yml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/envs/pks/opsman/director.yml" beforeDir="false" afterPath="$PROJECT_DIR$/envs/pks/opsman/director.yml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/envs/pks/opsman/opsman.yml" beforeDir="false" afterPath="$PROJECT_DIR$/envs/pks/opsman/opsman.yml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -134,10 +106,10 @@
     </option>
   </component>
   <component name="WindowStateProjectService">
-    <state x="613" y="250" width="598" height="548" key="find.popup" timestamp="1591768833035">
+    <state x="613" y="250" width="598" height="548" key="find.popup" timestamp="1591770392349">
       <screen x="0" y="23" width="1680" height="985" />
     </state>
-    <state x="613" y="250" width="598" height="548" key="find.popup/0.23.1680.985@0.23.1680.985" timestamp="1591768833035" />
+    <state x="613" y="250" width="598" height="548" key="find.popup/0.23.1680.985@0.23.1680.985" timestamp="1591770392349" />
   </component>
   <component name="masterDetails">
     <states>

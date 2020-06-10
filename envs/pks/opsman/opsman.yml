@@ -18,7 +18,7 @@ opsman-configuration:
     ntp: ntp1.svc.pivotal.io                    # example: ntp.ubuntu.com
     ssh_public_key: ((opsman_ssh_key.public_key))
     hostname: opsman.pksdemo.net
-    network: PAS-Infrastructure                 # vcenter network to deploy to
+    network: PKS-Infrastructure                 # vcenter network to deploy to
     netmask: 255.255.255.0
     gateway: 172.16.1.1
     vm_name: ops-manager-vm              # default: ops-manager-vm

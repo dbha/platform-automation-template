@@ -29,7 +29,7 @@ networks-configuration:
   networks:
   - name: infra-network
     subnets:
-    - iaas_identifier: PAS-Infrastructure
+    - iaas_identifier: PKS-Infrastructure
       cidr: 192.168.1.0/24
       dns: 10.192.2.10
       gateway: 192.168.1.1
