@@ -9,7 +9,8 @@ if [ -z $1 ] || [ -z $2 ] ; then
 fi	
 FLY_TARGET=$1
 FOUNDATION=$2
-PIPELINE_NAME="${FOUNDATION}-tas"
+#PIPELINE_NAME="${FOUNDATION}-tas"
+PIPELINE_NAME="${FOUNDATION}-pks"
 
 ## ytt from https://github.com/k14s/ytt/releases
 ./ytt template \
