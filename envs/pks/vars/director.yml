@@ -7,7 +7,7 @@ iaas-configurations_0_ephemeral_datastores_string: 'LUN01'
 iaas-configurations_0_nsx_networking_enabled: 'false'
 iaas-configurations_0_persistent_datastores_string: 'LUN01'
 iaas-configurations_0_ssl_verification_enabled: 'false'
-iaas-configurations_0_vcenter_host: vcsa-01.haas-224.pez.pivotal.io
+iaas-configurations_0_vcenter_host: vcsa-01.haas-466.pez.pivotal.io
 #iaas-configurations_0_vcenter_username: ''
 properties-configuration_security_configuration_generate_vm_passwords: 'true'
 #iaas-configurations_0_vcenter_password:
