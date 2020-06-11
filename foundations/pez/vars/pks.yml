@@ -3,9 +3,9 @@ network_name: ondemand-network
 
 pks_api_hostname: api.pks.haas-466.pez.pivotal.io
 plan1_selector_active_master_az_placement: az1
-plan1_selector_active_worker_az_placement: az1
+plan1_selector_active_worker_az_placement: az2
 service_network_name: ondemand-network
-singleton_availability_zone: az1
+singleton_availability_zone: az3
 network_selector_nsx_cloud-config-dns: 10.192.2.10,10.192.2.11
 network_selector_nsx_floating-ip-pool-ids: a1ccb31c-ed45-42aa-9fc2-7b8594aa5ab5
 network_selector_nsx_ip-block-id: 8ac4586b-2afa-414f-829b-f466f23208e4
@@ -24,4 +24,3 @@ network_selector_nsx_nsx-t-insecure: false
 network_selector_nsx_service_cluster_cidr: 10.100.200.0/24
 network_selector_nsx_t0-router-id: 1edceffc-4dc8-4ee7-970d-4a9547b8f2f5
 network_selector_nsx_vcenter_cluster: Cluster
-
