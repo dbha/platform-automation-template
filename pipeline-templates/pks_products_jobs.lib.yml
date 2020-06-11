@@ -183,191 +183,191 @@ config:
     source:
       repository: ubuntu
   inputs:
-    - name: generated-config
+  - name: generated-config
   params:
     FILE:
   run:
     path: bash
     args:
-      - -exc
-      - |
-        cat $FILE
+    - -exc
+    - |
+      cat $FILE
 #@ end
 
 jobs:
 
-  #@ def pks_products_jobs():
+#@ def pks_products_jobs():
 
-  #@overlay/match by="name",missing_ok=True
-  - name: install-and-patch-pks
-    serial: true
-    serial_groups: [serial-jobs]
-    plan:
-      - in_parallel:
-          - get: pipeline-trigger-version-git
-            trigger: false
-          - get: platform-automation-image
-            params:
-              unpack: true
-          - get: platform-automation-tasks
-            params:
-              unpack: true
-          - get: pipelines
-          - get: configuration
-          - get: pks-version-git
+#@overlay/match by="name",missing_ok=True
+- name: install-and-patch-pks
+  serial: true
+  serial_groups: [serial-jobs]
+  plan:
+  - in_parallel:
+    - get: pipeline-trigger-version-git
+      trigger: false
+    - get: platform-automation-image
+      params:
+        unpack: true
+    - get: platform-automation-tasks
+      params:
+        unpack: true
+    - get: pipelines
+    - get: configuration
+    - get: pks-version-git
 
-      - do:
-          - #@ prepare_tasks_with_secrets()
-          - #@ prepare_tasks_with_product_version("pks-version-git")
-          - #@ prepare_custom_tasks_with_secrets()
-          - #@ prepare_custom_tasks_with_product_version("pks-version-git")
-          - #@ download_product("pks-version-git", "pks")
-          - #@ upload_product()
-          - #@ upload_stemcell()
-          - #@ stage_configure_apply("pks")
-
-
-          #@overlay/match by="name",missing_ok=True
-  - name: configure-pks-only
-    serial: true
-    serial_groups: [serial-jobs]
-    plan:
-      - in_parallel:
-          - get: pipeline-trigger-version-git
-            trigger: false
-          - get: platform-automation-image
-            params:
-              unpack: true
-          - get: platform-automation-tasks
-            params:
-              unpack: true
-          - get: pipelines
-          - get: configuration
-
-      - do:
-          - #@ prepare_tasks_with_secrets()
-          - #@ prepare_custom_tasks_with_secrets()
-          - #@ configure_product("pks")
+  - do:
+    - #@ prepare_tasks_with_secrets()
+    - #@ prepare_tasks_with_product_version("pks-version-git")
+    - #@ prepare_custom_tasks_with_secrets()
+    - #@ prepare_custom_tasks_with_product_version("pks-version-git")
+    - #@ download_product("pks-version-git", "pks")
+    - #@ upload_product()
+    - #@ upload_stemcell()
+    - #@ stage_configure_apply("pks")
 
 
-          #@overlay/match by="name",missing_ok=True
-  - name: apply-change-pks
-    serial: true
-    serial_groups: [serial-jobs]
-    plan:
-      - in_parallel:
-          - get: pipeline-trigger-version-git
-            passed: [configure-pks-only]
-            trigger: false
-          - get: platform-automation-image
-            params:
-              unpack: true
-          - get: platform-automation-tasks
-            params:
-              unpack: true
-          - get: pipelines
-          - get: configuration
+#@overlay/match by="name",missing_ok=True
+- name: configure-pks-only
+  serial: true
+  serial_groups: [serial-jobs]
+  plan:
+  - in_parallel:
+    - get: pipeline-trigger-version-git
+      trigger: false
+    - get: platform-automation-image
+      params:
+        unpack: true
+    - get: platform-automation-tasks
+      params:
+        unpack: true
+    - get: pipelines
+    - get: configuration
 
-      - do:
-          - #@ prepare_tasks_with_secrets()
-          - #@ prepare_custom_tasks_with_secrets()
-          - #@ configure_product("pks")
-          - #@ apply_product_changes("pivotal-container-service")
+  - do:
+    - #@ prepare_tasks_with_secrets()
+    - #@ prepare_custom_tasks_with_secrets()
+    - #@ configure_product("pks")
 
 
+#@overlay/match by="name",missing_ok=True
+- name: apply-change-pks
+  serial: true
+  serial_groups: [serial-jobs]
+  plan:
+  - in_parallel:
+    - get: pipeline-trigger-version-git
+      passed: [configure-pks-only]
+      trigger: false
+    - get: platform-automation-image
+      params:
+        unpack: true
+    - get: platform-automation-tasks
+      params:
+        unpack: true
+    - get: pipelines
+    - get: configuration
+
+  - do:
+    - #@ prepare_tasks_with_secrets()
+    - #@ prepare_custom_tasks_with_secrets()
+    - #@ configure_product("pks")
+    - #@ apply_product_changes("pivotal-container-service")
 
 
-          #@overlay/match by="name",missing_ok=True
-  - name: bbr-backup-pks
-    serial: true
-    serial_groups: [ bbr-backup ]
-    plan:
-      - in_parallel:
-          - get: platform-automation-image
-            params:
-              unpack: true
-          - get: platform-automation-tasks
-            params:
-              unpack: true
-          - get: pipelines
-          - get: configuration
-          - get: bbr-release-pivnet
-            params:
-              globs: [ "bbr-*-linux-*"]
-      - do:
-          - #@ prepare_custom_tasks_with_secrets()
-
-          - task: bbr-cleanup
-            file: pipelines/tasks/bbr-cleanup-product.yml
-            input_mapping:
-              bbr-release: bbr-release-pivnet
-              config: configuration
-            params:
-              ENV_FILE: foundations/((foundation))/opsman/env.yml
-              PRODUCT_NAME: pivotal-container-service
-
-          - task: bbr-backup
-            file: pipelines/tasks/bbr-backup-product.yml
-            input_mapping:
-              bbr-release: bbr-release-pivnet
-              config: configuration
-            params:
-              ENV_FILE: foundations/((foundation))/opsman/env.yml
-              FOUNDATION: ((foundation))
-              PRODUCT_NAME: pivotal-container-service
-            on_failure:
-              task: bbr-cleanup
-              file: pipelines/tasks/bbr-cleanup-product.yml
-              input_mapping:
-                bbr-release: bbr-release-pivnet
-                config: configuration
-              params:
-                ENV_FILE: foundations/((foundation))/opsman/env.yml
-                PRODUCT_NAME: pivotal-container-service
-          - put: bbr-pks-backup-bucket
-            params:
-              file: backup-artifact/((foundation))-pivotal-container-service-backup_*.tgz
 
 
-  #@overlay/match by="name",missing_ok=True
-  - name: test
-    serial: true
-    plan:
-      - in_parallel:
-          - get: pipeline-trigger-version-git
-          - get: platform-automation-image
-            params:
-              unpack: true
-          - get: platform-automation-tasks
-            params:
-              unpack: true
-          - get: pipelines
-          - get: configuration
-          - get: pks-version-git
+#@overlay/match by="name",missing_ok=True
+- name: bbr-backup-pks
+  serial: true
+  serial_groups: [ bbr-backup ]
+  plan:
+  - in_parallel:
+      - get: platform-automation-image
+        params:
+          unpack: true
+      - get: platform-automation-tasks
+        params:
+          unpack: true
+      - get: pipelines
+      - get: configuration
+      - get: bbr-release-pivnet
+        params:
+          globs: [ "bbr-*-linux-*"]
+  - do:
+      - #@ prepare_custom_tasks_with_secrets()
 
-      - do:
+      - task: bbr-cleanup
+        file: pipelines/tasks/bbr-cleanup-product.yml
+        input_mapping:
+          bbr-release: bbr-release-pivnet
+          config: configuration
+        params:
+          ENV_FILE: foundations/((foundation))/opsman/env.yml
+          PRODUCT_NAME: pivotal-container-service
 
-          - task: test
-            config:
-              platform: linux
-              image_resource:
-                type: docker-image
-                source:
-                  repository: ubuntu
-              params:
-                FILE:
-                WORLD_PARAM: ((opsman_ssh_key.public_key))
-              run:
-                path: bash
-                args:
-                  - -exc
-                  - |
-                    echo "hi"
-                    echo "$WORLD_PARAM"
+      - task: bbr-backup
+        file: pipelines/tasks/bbr-backup-product.yml
+        input_mapping:
+          bbr-release: bbr-release-pivnet
+          config: configuration
+        params:
+          ENV_FILE: foundations/((foundation))/opsman/env.yml
+          FOUNDATION: ((foundation))
+          PRODUCT_NAME: pivotal-container-service
+        on_failure:
+          task: bbr-cleanup
+          file: pipelines/tasks/bbr-cleanup-product.yml
+          input_mapping:
+            bbr-release: bbr-release-pivnet
+            config: configuration
+          params:
+            ENV_FILE: foundations/((foundation))/opsman/env.yml
+            PRODUCT_NAME: pivotal-container-service
+      - put: bbr-pks-backup-bucket
+        params:
+          file: backup-artifact/((foundation))-pivotal-container-service-backup_*.tgz
 
-          - #@ prepare_tasks_with_secrets()
-          - #@ prepare_custom_tasks_with_secrets()
-          - #@ prepare_custom_tasks_with_product_version("pks-version-git")
+
+#@overlay/match by="name",missing_ok=True
+- name: test
+  serial: true
+  plan:
+  - in_parallel:
+    - get: pipeline-trigger-version-git
+    - get: platform-automation-image
+      params:
+        unpack: true
+    - get: platform-automation-tasks
+      params:
+        unpack: true
+    - get: pipelines
+    - get: configuration
+    - get: pks-version-git
+
+  - do:
+
+    - task: test
+      config:
+          platform: linux
+          image_resource:
+            type: docker-image
+            source:
+              repository: ubuntu
+          params:
+            FILE:
+            WORLD_PARAM: ((opsman_ssh_key.public_key))
+          run:
+            path: bash
+            args:
+            - -exc
+            - |
+              echo "hi"
+              echo "$WORLD_PARAM"
+
+    - #@ prepare_tasks_with_secrets()
+    - #@ prepare_custom_tasks_with_secrets()
+    - #@ prepare_custom_tasks_with_product_version("pks-version-git")
 
 
 #@ end
