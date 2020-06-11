@@ -1,112 +1,112 @@
 resource_types:
-- name: pivnet
-  type: docker-image
-  source:
-    repository: pivotalcf/pivnet-resource
-    tag: latest-final
+  - name: pivnet
+    type: docker-image
+    source:
+      repository: pivotalcf/pivnet-resource
+      tag: latest-final
 
 
 resources:
-- name: platform-automation-pivnet
-  type: pivnet
-  source:
-    api_token: ((pivnet_token))
-    product_slug: platform-automation
-    product_version: 4\.(.*)
-    sort_by: semver
+  - name: platform-automation-pivnet
+    type: pivnet
+    source:
+      api_token: ((pivnet_token))
+      product_slug: platform-automation
+      product_version: 4\.(.*)
+      sort_by: semver
 
-- name: pipelines
-  type: git
-  source:
-    private_key: ((git.private_key))
-    uri: ((git.platform_automation_pipelines.uri))
-    branch: master
+  - name: pipelines
+    type: git
+    source:
+      private_key: ((git.private_key))
+      uri: ((git.platform_automation_pipelines.uri))
+      branch: master
 
-- name: platform-automation-tasks
-  type: s3
-  source:
-    endpoint: ((s3.endpoint))
-    access_key_id: ((s3.access_key_id))
-    secret_access_key: ((s3.secret_access_key))
-    region_name: ((s3.region_name))
-    bucket: ((s3.buckets.platform_automation))
-    regexp: platform-automation-tasks-(.*).zip
-    skip_ssl_verification: true
+  - name: platform-automation-tasks
+    type: s3
+    source:
+      endpoint: ((s3.endpoint))
+      access_key_id: ((s3.access_key_id))
+      secret_access_key: ((s3.secret_access_key))
+      region_name: ((s3.region_name))
+      bucket: ((s3.buckets.platform_automation))
+      regexp: platform-automation-tasks-(.*).zip
+      skip_ssl_verification: true
 
-- name: platform-automation-image
-  type: s3
-  source:
-    endpoint: ((s3.endpoint))
-    access_key_id: ((s3.access_key_id))
-    secret_access_key: ((s3.secret_access_key))
-    region_name: ((s3.region_name))
-    bucket: ((s3.buckets.platform_automation))
-    regexp: platform-automation-image-(.*).tgz
-    skip_ssl_verification: true
+  - name: platform-automation-image
+    type: s3
+    source:
+      endpoint: ((s3.endpoint))
+      access_key_id: ((s3.access_key_id))
+      secret_access_key: ((s3.secret_access_key))
+      region_name: ((s3.region_name))
+      bucket: ((s3.buckets.platform_automation))
+      regexp: platform-automation-image-(.*).tgz
+      skip_ssl_verification: true
 
-- name: configuration
-  type: git
-  source:
-    private_key: ((git.private_key))
-    uri: ((git.platform_automation_configs.uri))
-    branch: master
+  - name: configuration
+    type: git
+    source:
+      private_key: ((git.private_key))
+      uri: ((git.platform_automation_configs.uri))
+      branch: master
 
-- name: opsman-product
-  type: s3
-  source:
-    endpoint: ((s3.endpoint))
-    access_key_id: ((s3.access_key_id))
-    bucket: ((s3.buckets.pivnet_products))
-    region_name: ((s3.region_name))
-    secret_access_key: ((s3.secret_access_key))
-    regexp: "ops-manager-vsphere-*(.*).*"
-    skip_ssl_verification: true
-
-
-- name: tas-product
-  type: s3
-  source:
-    endpoint: ((s3.endpoint))
-    access_key_id: ((s3.access_key_id))
-    bucket: ((s3.buckets.pivnet_products))
-    region_name: ((s3.region_name))
-    secret_access_key: ((s3.secret_access_key))
-    regexp: cf-(.*).pivotal
-    skip_ssl_verification: true
-
-- name: tas-stemcell
-  type: s3
-  source:
-    endpoint: ((s3.endpoint))
-    access_key_id: ((s3.access_key_id))
-    bucket: ((s3.buckets.pivnet_products))
-    region_name: ((s3.region_name))
-    secret_access_key: ((s3.secret_access_key))
-    regexp: bosh-stemcell-(.*)-vsphere.*\.tgz
-    skip_ssl_verification: true
+  - name: opsman-product
+    type: s3
+    source:
+      endpoint: ((s3.endpoint))
+      access_key_id: ((s3.access_key_id))
+      bucket: ((s3.buckets.pivnet_products))
+      region_name: ((s3.region_name))
+      secret_access_key: ((s3.secret_access_key))
+      regexp: "ops-manager-vsphere-*(.*).*"
+      skip_ssl_verification: true
 
 
-- name: healthwatch-product
-  type: s3
-  source:
-    endpoint: ((s3.endpoint))
-    access_key_id: ((s3.access_key_id))
-    bucket: ((s3.buckets.pivnet_products))
-    region_name: ((s3.region_name))
-    secret_access_key: ((s3.secret_access_key))
-    regexp: p-healthwatch-(.*).pivotal
-    skip_ssl_verification: true
-    
-- name: healthwatch-stemcell
-  type: s3
-  source:
-    endpoint: ((s3.endpoint))
-    access_key_id: ((s3.access_key_id))
-    bucket: ((s3.buckets.pivnet_products))
-    region_name: ((s3.region_name))
-    secret_access_key: ((s3.secret_access_key))
-    regexp: bosh-stemcell-(.*)-vsphere.*\.tgz
-    skip_ssl_verification: true
+  - name: tas-product
+    type: s3
+    source:
+      endpoint: ((s3.endpoint))
+      access_key_id: ((s3.access_key_id))
+      bucket: ((s3.buckets.pivnet_products))
+      region_name: ((s3.region_name))
+      secret_access_key: ((s3.secret_access_key))
+      regexp: cf-(.*).pivotal
+      skip_ssl_verification: true
+
+  - name: tas-stemcell
+    type: s3
+    source:
+      endpoint: ((s3.endpoint))
+      access_key_id: ((s3.access_key_id))
+      bucket: ((s3.buckets.pivnet_products))
+      region_name: ((s3.region_name))
+      secret_access_key: ((s3.secret_access_key))
+      regexp: bosh-stemcell-(.*)-vsphere.*\.tgz
+      skip_ssl_verification: true
+
+
+  - name: healthwatch-product
+    type: s3
+    source:
+      endpoint: ((s3.endpoint))
+      access_key_id: ((s3.access_key_id))
+      bucket: ((s3.buckets.pivnet_products))
+      region_name: ((s3.region_name))
+      secret_access_key: ((s3.secret_access_key))
+      regexp: p-healthwatch-(.*).pivotal
+      skip_ssl_verification: true
+
+  - name: healthwatch-stemcell
+    type: s3
+    source:
+      endpoint: ((s3.endpoint))
+      access_key_id: ((s3.access_key_id))
+      bucket: ((s3.buckets.pivnet_products))
+      region_name: ((s3.region_name))
+      secret_access_key: ((s3.secret_access_key))
+      regexp: bosh-stemcell-(.*)-vsphere.*\.tgz
+      skip_ssl_verification: true
 
 
 
@@ -124,7 +124,7 @@ credhub_interpolate: &credhub_interpolate
     CREDHUB_CLIENT: ((credhub.client))
     CREDHUB_SECRET: ((credhub.secret))
     PREFIX: /concourse/((foundation))
-    INTERPOLATION_PATHS: envs/((foundation))/opsman envs/((foundation))/download-products
+    INTERPOLATION_PATHS: foundations/((foundation))/opsman foundations/((foundation))/download-products
 
 
 prepare_tasks_with_secrets: &prepare_tasks_with_secrets
@@ -135,150 +135,150 @@ prepare_tasks_with_secrets: &prepare_tasks_with_secrets
     config: configuration
     vars: configuration
   params:
-    CONFIG_PATHS: config/envs/((foundation))/download-products
-    VARS_PATHS: vars/envs/((foundation))/generated-vars vars/envs/((foundation))/vars
+    CONFIG_PATHS: config/foundations/((foundation))/download-products
+    VARS_PATHS: vars/foundations/((foundation))/generated-vars vars/foundations/((foundation))/vars
   output_mapping:
     tasks: platform-automation-tasks
 
 
 jobs:
-  
-- name: fetch-platform-automation
-  serial: true
-  serial_groups: [serial-jobs]
-  plan:
-    - get: platform-automation-pivnet
-    - put: platform-automation-tasks
-      params:
-        file: platform-automation-pivnet/platform-automation-tasks-*.zip
-    - put: platform-automation-image
-      params:
-        file: platform-automation-pivnet/platform-automation-image-*.tgz
 
-- name: fetch-opsman
-  serial: true
-  serial_groups: [serial-jobs]
-  plan:
-  - in_parallel:
-    - get: pipelines
-    - get: platform-automation-image
-      params: { unpack: true }
-    - get: platform-automation-tasks
-      params: { unpack: true }
-    - get: configuration
-
-  - task: prepare_tasks_with_secrets
-    <<: *prepare_tasks_with_secrets
-
-  - task: download-opsman-image
-    image: platform-automation-image
-    file: platform-automation-tasks/tasks/download-product.yml
-    input_mapping: {config: configuration }
-    params:
-      CONFIG_FILE: envs/((foundation))/download-products/opsman.yml
-  - put: opsman-product
-    params:
-      file: downloaded-product/*
-
-
-
-- name: pre-fetch-opsman
-  serial: true
-  serial_groups: [serial-jobs]
-  plan:
-  - in_parallel:
-    - get: pipelines
-    - get: platform-automation-image
-      params: { unpack: true }
-    - get: platform-automation-tasks
-      params: { unpack: true }
-    - get: configuration
-
-  - task: prepare_tasks_with_secrets
-    <<: *prepare_tasks_with_secrets
-
-  - task: download-only-opsman-image
-    image: platform-automation-image
-    file: pipelines/tasks/download-only-product.yml
-    input_mapping: {config: configuration }
-    params:
-      CONFIG_FILE: envs/((foundation))/download-products/opsman.yml
-    on_success:
-      try:
-        task: check_dup_file_in_s3
-        image: platform-automation-image
-        file: pipelines/tasks/exists_file_s3.yml
+  - name: fetch-platform-automation
+    serial: true
+    serial_groups: [serial-jobs]
+    plan:
+      - get: platform-automation-pivnet
+      - put: platform-automation-tasks
         params:
-          endpoint: ((s3.endpoint))
-          access_key_id: ((s3.access_key_id))
-          bucket: ((s3.buckets.pivnet_products))
-          region_name: ((s3.region_name))
-          secret_access_key: ((s3.secret_access_key))
+          file: platform-automation-pivnet/platform-automation-tasks-*.zip
+      - put: platform-automation-image
+        params:
+          file: platform-automation-pivnet/platform-automation-image-*.tgz
+
+  - name: fetch-opsman
+    serial: true
+    serial_groups: [serial-jobs]
+    plan:
+      - in_parallel:
+          - get: pipelines
+          - get: platform-automation-image
+            params: { unpack: true }
+          - get: platform-automation-tasks
+            params: { unpack: true }
+          - get: configuration
+
+      - task: prepare_tasks_with_secrets
+        <<: *prepare_tasks_with_secrets
+
+      - task: download-opsman-image
+        image: platform-automation-image
+        file: platform-automation-tasks/tasks/download-product.yml
+        input_mapping: {config: configuration }
+        params:
+          CONFIG_FILE: foundations/((foundation))/download-products/opsman.yml
+      - put: opsman-product
+        params:
+          file: downloaded-product/*
 
 
 
-- name: fetch-tas
-  serial: true
-  serial_groups: [serial-jobs]
-  plan:
-  - in_parallel:
-    - get: platform-automation-image
-      params:
-        unpack: true
-    - get: platform-automation-tasks
-      params:
-        unpack: true
-    - get: configuration
+  - name: pre-fetch-opsman
+    serial: true
+    serial_groups: [serial-jobs]
+    plan:
+      - in_parallel:
+          - get: pipelines
+          - get: platform-automation-image
+            params: { unpack: true }
+          - get: platform-automation-tasks
+            params: { unpack: true }
+          - get: configuration
 
-  - task: prepare_tasks_with_secrets
-    <<: *prepare_tasks_with_secrets
+      - task: prepare_tasks_with_secrets
+        <<: *prepare_tasks_with_secrets
 
-  - task: download-product-and-stemcell
-    image: platform-automation-image
-    file: platform-automation-tasks/tasks/download-product.yml
-    params:
-      CONFIG_FILE: envs/((foundation))/download-products/tas.yml
-    input_mapping:
-      config: configuration
+      - task: download-only-opsman-image
+        image: platform-automation-image
+        file: pipelines/tasks/download-only-product.yml
+        input_mapping: {config: configuration }
+        params:
+          CONFIG_FILE: foundations/((foundation))/download-products/opsman.yml
+        on_success:
+          try:
+            task: check_dup_file_in_s3
+            image: platform-automation-image
+            file: pipelines/tasks/exists_file_s3.yml
+            params:
+              endpoint: ((s3.endpoint))
+              access_key_id: ((s3.access_key_id))
+              bucket: ((s3.buckets.pivnet_products))
+              region_name: ((s3.region_name))
+              secret_access_key: ((s3.secret_access_key))
 
-  - in_parallel:
-    - put: tas-product
-      params:
-        file: downloaded-product/*.pivotal
-    - put: tas-stemcell
-      params:
-        file: downloaded-stemcell/*.tgz
+
+
+  - name: fetch-tas
+    serial: true
+    serial_groups: [serial-jobs]
+    plan:
+      - in_parallel:
+          - get: platform-automation-image
+            params:
+              unpack: true
+          - get: platform-automation-tasks
+            params:
+              unpack: true
+          - get: configuration
+
+      - task: prepare_tasks_with_secrets
+        <<: *prepare_tasks_with_secrets
+
+      - task: download-product-and-stemcell
+        image: platform-automation-image
+        file: platform-automation-tasks/tasks/download-product.yml
+        params:
+          CONFIG_FILE: foundations/((foundation))/download-products/tas.yml
+        input_mapping:
+          config: configuration
+
+      - in_parallel:
+          - put: tas-product
+            params:
+              file: downloaded-product/*.pivotal
+          - put: tas-stemcell
+            params:
+              file: downloaded-stemcell/*.tgz
 
 
 
-- name: fetch-healthwatch
-  serial: true
-  serial_groups: [serial-jobs]
-  plan:
-  - in_parallel:
-    - get: platform-automation-image
-      params:
-        unpack: true
-    - get: platform-automation-tasks
-      params:
-        unpack: true
-    - get: configuration
+  - name: fetch-healthwatch
+    serial: true
+    serial_groups: [serial-jobs]
+    plan:
+      - in_parallel:
+          - get: platform-automation-image
+            params:
+              unpack: true
+          - get: platform-automation-tasks
+            params:
+              unpack: true
+          - get: configuration
 
-  - task: prepare_tasks_with_secrets
-    <<: *prepare_tasks_with_secrets
+      - task: prepare_tasks_with_secrets
+        <<: *prepare_tasks_with_secrets
 
-  - task: download-product-and-stemcell
-    image: platform-automation-image
-    file: platform-automation-tasks/tasks/download-product.yml
-    params:
-      CONFIG_FILE: envs/((foundation))/download-products/healthwatch.yml
-    input_mapping:
-      config: configuration
+      - task: download-product-and-stemcell
+        image: platform-automation-image
+        file: platform-automation-tasks/tasks/download-product.yml
+        params:
+          CONFIG_FILE: foundations/((foundation))/download-products/healthwatch.yml
+        input_mapping:
+          config: configuration
 
-  - in_parallel:
-    - put: healthwatch-product
-      params:
-        file: downloaded-product/*.pivotal
-    - put: healthwatch-stemcell
-      params:
-        file: downloaded-stemcell/*.tgz
+      - in_parallel:
+          - put: healthwatch-product
+            params:
+              file: downloaded-product/*.pivotal
+          - put: healthwatch-stemcell
+            params:
+              file: downloaded-stemcell/*.tgz
