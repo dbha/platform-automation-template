@@ -20,9 +20,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="a74f0e74-944c-4ce7-98f1-3bfa4b4bdb8d" name="Default" comment="">
+      <change afterPath="$PROJECT_DIR$/foundations/pez/download-products/opsman.yml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/download-products.sh" beforeDir="false" afterPath="$PROJECT_DIR$/download-products.sh" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/generated-pipeline-pks.yml" beforeDir="false" afterPath="$PROJECT_DIR$/generated-pipeline-pks.yml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
