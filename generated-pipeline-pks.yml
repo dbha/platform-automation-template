@@ -6,6 +6,8 @@ groups:
   - apply-change-pks
   - bbr-backup-pks
   - test
+  - bootstrap-generate-domain-certificate
+  - bootstrap-save-domain-certificate-to-credhub
   - install-opsman
   - configure-opsman-authentication
   - configure-director
@@ -24,6 +26,8 @@ groups:
   - test
 - name: opsman
   jobs:
+  - bootstrap-generate-domain-certificate
+  - bootstrap-save-domain-certificate-to-credhub
   - install-opsman
   - configure-opsman-authentication
   - configure-director
@@ -39,6 +43,8 @@ groups:
   - extract-director-config
   - export-installation
   - bbr-backup-director
+  - bootstrap-generate-domain-certificate
+  - bootstrap-save-domain-certificate-to-credhub
 - name: opsman-delete
   jobs:
   - delete-opsman
@@ -60,7 +66,7 @@ resources:
     driver: git
     uri: ((git.platform_automation_configs.uri))
     branch: ((git.platform_automation_configs.branch))
-    file: envs/((foundation))/pipeline_trigger_version_((pipeline_name))
+    file: foundations/((foundation))/pipeline_trigger_version_((pipeline_name))
     private_key: ((git.private_key))
 - name: platform-automation-tasks
   type: s3
@@ -106,6 +112,16 @@ resources:
     bucket: ((s3.buckets.installation))
     regexp: ((foundation))-installation-(.*).zip
     skip_ssl_verification: true
+- name: domain_certificate
+  type: s3
+  source:
+    endpoint: ((s3.endpoint))
+    access_key_id: ((s3.access_key_id))
+    secret_access_key: ((s3.secret_access_key))
+    region_name: ((s3.region_name))
+    bucket: ((s3.buckets.installation))
+    regexp: certificate_*_(.*).tgz
+    skip_ssl_verification: true
 - name: opsman_vm_state
   type: git
   source:
@@ -114,7 +130,7 @@ resources:
     branch: ((git.platform_automation_configs.branch))
     skip_ssl_verification: true
     paths:
-    - envs/((foundation))/state/state.yml
+    - foundations/((foundation))/state/state.yml
 - name: opsman-version-git
   type: semver-config
   source:
@@ -122,7 +138,7 @@ resources:
     uri: ((git.platform_automation_configs.uri))
     branch: ((git.platform_automation_configs.branch))
     private_key: ((git.private_key))
-    config_file: envs/((foundation))/versions.yml
+    config_file: foundations/((foundation))/versions.yml
     config_path: products.opsman
     version_path: products.opsman.product-version
     version_pattern: m.n.p
@@ -164,6 +180,93 @@ resources:
     regexp: ((foundation))-pivotal-container-service-backup_(.*).tgz
     skip_ssl_verification: true
 jobs:
+- name: bootstrap-generate-domain-certificate
+  serial: true
+  serial_groups:
+  - serial-jobs
+  plan:
+  - in_parallel:
+    - get: platform-automation-image
+      params:
+        unpack: true
+    - get: platform-automation-tasks
+      params:
+        unpack: true
+    - get: pipelines
+    - get: configuration
+  - do:
+    - task: prepare_custom_tasks_with_secrets
+      image: platform-automation-image
+      file: pipelines/tasks/prepare-tasks-with-secrets.yml
+      input_mapping:
+        tasks: pipelines
+        config: configuration
+        vars: configuration
+      params:
+        CONFIG_PATHS: config/foundations/((foundation))/opsman
+        VARS_PATHS: vars/foundations/((foundation))/generated-vars vars/foundations/((foundation))/vars
+        TASKS_PATH: tasks/tasks
+      output_mapping:
+        tasks: pipelines
+    - task: generate-domain-certificate
+      file: pipelines/tasks/generate-certificate.yml
+      input_mapping:
+        config: configuration
+      params:
+        AWS_ACCESS_KEY_ID: ((certificate.generate.dns_privider_access_key))
+        AWS_SECRET_ACCESS_KEY: ((certificate.generate.dns_privider_access_secret_key))
+        AWS_REGION: ((certificate.generate.dns_provider_region))
+        SUBDOMAIN: ((certificate.generate.subdomain))
+        AWS_HOSTED_ZONE_ID: ((certificate.generate.dns_provider_hosted_zone_id))
+        EMAIL: ((certificate.generate.letsencrypt_email))
+    - put: domain_certificate
+      params:
+        file: generated-certificate//certificate_((certificate.generate.subdomain))_*.tgz
+- name: bootstrap-save-domain-certificate-to-credhub
+  serial: true
+  serial_groups:
+  - serial-jobs
+  plan:
+  - in_parallel:
+    - get: platform-automation-image
+      params:
+        unpack: true
+    - get: platform-automation-tasks
+      params:
+        unpack: true
+    - get: pipelines
+    - get: configuration
+    - get: domain_certificate
+  - do:
+    - task: prepare_custom_tasks_with_secrets
+      image: platform-automation-image
+      file: pipelines/tasks/prepare-tasks-with-secrets.yml
+      input_mapping:
+        tasks: pipelines
+        config: configuration
+        vars: configuration
+      params:
+        CONFIG_PATHS: config/foundations/((foundation))/opsman
+        VARS_PATHS: vars/foundations/((foundation))/generated-vars vars/foundations/((foundation))/vars
+        TASKS_PATH: tasks/tasks
+      output_mapping:
+        tasks: pipelines
+    - task: save-certificate-to-credhub
+      image: platform-automation-image
+      file: pipelines/tasks/save-certificate-to-credhub.yml
+      input_mapping:
+        config: configuration
+        generated-certificate: domain_certificate
+      params:
+        CERTIFICATE_FILE: generated-certificate/certificate*.tgz
+        SUBDOMAIN: ((certificate.generate.subdomain))
+        CREDHUB_CA_CERT: ((credhub.ca_cert))
+        CREDHUB_SECRET: ((credhub_client.password))
+        CREDHUB_CLIENT: ((credhub_client.username))
+        CREDHUB_SERVER: ((credhub.server))
+        PIPELINE_NAME: ((pipeline_name))
+        PREFIX: /concourse/main
+        KEY_NAME: ((certificate.credhub_key_name))
 - name: install-opsman
   serial: true
   serial_groups:
@@ -193,8 +296,8 @@ jobs:
         config: configuration
         vars: configuration
       params:
-        CONFIG_PATHS: config/envs/((foundation))/opsman config/envs/((foundation))/products
-        VARS_PATHS: vars/envs/((foundation))/generated-vars vars/envs/((foundation))/vars
+        CONFIG_PATHS: config/foundations/((foundation))/opsman
+        VARS_PATHS: vars/foundations/((foundation))/generated-vars vars/foundations/((foundation))/vars
       output_mapping:
         tasks: platform-automation-tasks
     - task: prepare_tasks_with_product_version
@@ -206,7 +309,7 @@ jobs:
         vars: configuration
       params:
         CONFIG_PATHS: config
-        VARS_PATHS: vars/envs/((foundation))/generated-vars vars/envs/((foundation))/vars
+        VARS_PATHS: vars/foundations/((foundation))/generated-vars vars/foundations/((foundation))/vars
       output_mapping:
         tasks: platform-automation-tasks
     - task: prepare_custom_tasks_with_secrets
@@ -217,8 +320,8 @@ jobs:
         config: configuration
         vars: configuration
       params:
-        CONFIG_PATHS: config/envs/((foundation))/opsman config/envs/((foundation))/products
-        VARS_PATHS: vars/envs/((foundation))/generated-vars vars/envs/((foundation))/vars
+        CONFIG_PATHS: config/foundations/((foundation))/opsman
+        VARS_PATHS: vars/foundations/((foundation))/generated-vars vars/foundations/((foundation))/vars
         TASKS_PATH: tasks/tasks
       output_mapping:
         tasks: pipelines
@@ -231,7 +334,7 @@ jobs:
         config: opsman-version-git
       params:
         CONFIG_PATHS: config
-        VARS_PATHS: vars/envs/((foundation))/generated-vars vars/envs/((foundation))/vars
+        VARS_PATHS: vars/foundations/((foundation))/generated-vars vars/foundations/((foundation))/vars
         TASKS_PATH: tasks/tasks
       output_mapping:
         tasks: pipelines
@@ -258,8 +361,8 @@ jobs:
       input_mapping:
         config: configuration
       params:
-        OPSMAN_CONFIG_FILE: envs/((foundation))/opsman/opsman.yml
-        STATE_FILE: envs/((foundation))/state/state.yml
+        OPSMAN_CONFIG_FILE: foundations/((foundation))/opsman/opsman.yml
+        STATE_FILE: foundations/((foundation))/state/state.yml
     - task: download-product
       image: platform-automation-image
       file: platform-automation-tasks/tasks/download-product.yml
@@ -268,7 +371,7 @@ jobs:
         vars: configuration
       params:
         CONFIG_FILE: semver-config.yaml
-        VARS_FILES: vars/envs/((foundation))/vars/versions.yml
+        VARS_FILES: vars/foundations/((foundation))/vars/versions.yml
     - task: create-vm
       image: platform-automation-image
       file: platform-automation-tasks/tasks/create-vm.yml
@@ -278,9 +381,9 @@ jobs:
         vars: configuration
         state: configuration
       params:
-        OPSMAN_CONFIG_FILE: envs/((foundation))/opsman/opsman.yml
-        VARS_FILES: vars/envs/((foundation))/vars/opsman.yml
-        STATE_FILE: envs/((foundation))/state/state.yml
+        OPSMAN_CONFIG_FILE: foundations/((foundation))/opsman/opsman.yml
+        VARS_FILES: vars/foundations/((foundation))/vars/opsman.yml
+        STATE_FILE: foundations/((foundation))/state/state.yml
       on_success:
         do:
         - task: opsman_state_make_commit
@@ -293,7 +396,7 @@ jobs:
             repository-commit: configuration-commit
           params:
             FILE_SOURCE_PATH: state.yml
-            FILE_DESTINATION_PATH: envs/((foundation))/state/state.yml
+            FILE_DESTINATION_PATH: foundations/((foundation))/state/state.yml
             GIT_AUTHOR_EMAIL: ((git.user.email))
             GIT_AUTHOR_NAME: ((git.user.username))
             COMMIT_MESSAGE: Update from upgrade-opsman
@@ -331,8 +434,8 @@ jobs:
         config: configuration
         vars: configuration
       params:
-        CONFIG_PATHS: config/envs/((foundation))/opsman config/envs/((foundation))/products
-        VARS_PATHS: vars/envs/((foundation))/generated-vars vars/envs/((foundation))/vars
+        CONFIG_PATHS: config/foundations/((foundation))/opsman
+        VARS_PATHS: vars/foundations/((foundation))/generated-vars vars/foundations/((foundation))/vars
       output_mapping:
         tasks: platform-automation-tasks
     - task: configure-authentication
@@ -343,8 +446,8 @@ jobs:
         env: configuration
         config: configuration
       params:
-        ENV_FILE: envs/((foundation))/opsman/env.yml
-        AUTH_CONFIG_FILE: envs/((foundation))/opsman/auth.yml
+        ENV_FILE: foundations/((foundation))/opsman/env.yml
+        AUTH_CONFIG_FILE: foundations/((foundation))/opsman/auth.yml
 - name: configure-director
   serial: true
   serial_groups:
@@ -375,8 +478,8 @@ jobs:
         config: configuration
         vars: configuration
       params:
-        CONFIG_PATHS: config/envs/((foundation))/opsman config/envs/((foundation))/products
-        VARS_PATHS: vars/envs/((foundation))/generated-vars vars/envs/((foundation))/vars
+        CONFIG_PATHS: config/foundations/((foundation))/opsman
+        VARS_PATHS: vars/foundations/((foundation))/generated-vars vars/foundations/((foundation))/vars
       output_mapping:
         tasks: platform-automation-tasks
     - task: configure-director
@@ -387,9 +490,9 @@ jobs:
         config: configuration
         vars: configuration
       params:
-        ENV_FILE: envs/((foundation))/opsman/env.yml
-        DIRECTOR_CONFIG_FILE: envs/((foundation))/opsman/director.yml
-        VARS_FILES: vars/envs/((foundation))/vars/director.yml
+        ENV_FILE: foundations/((foundation))/opsman/env.yml
+        DIRECTOR_CONFIG_FILE: foundations/((foundation))/opsman/director.yml
+        VARS_FILES: vars/foundations/((foundation))/vars/director.yml
 - name: configure-director-only
   serial: true
   serial_groups:
@@ -417,8 +520,8 @@ jobs:
         config: configuration
         vars: configuration
       params:
-        CONFIG_PATHS: config/envs/((foundation))/opsman config/envs/((foundation))/products
-        VARS_PATHS: vars/envs/((foundation))/generated-vars vars/envs/((foundation))/vars
+        CONFIG_PATHS: config/foundations/((foundation))/opsman
+        VARS_PATHS: vars/foundations/((foundation))/generated-vars vars/foundations/((foundation))/vars
       output_mapping:
         tasks: platform-automation-tasks
     - task: configure-director
@@ -429,9 +532,9 @@ jobs:
         config: configuration
         vars: configuration
       params:
-        ENV_FILE: envs/((foundation))/opsman/env.yml
-        DIRECTOR_CONFIG_FILE: envs/((foundation))/opsman/director.yml
-        VARS_FILES: vars/envs/((foundation))/vars/director.yml
+        ENV_FILE: foundations/((foundation))/opsman/env.yml
+        DIRECTOR_CONFIG_FILE: foundations/((foundation))/opsman/director.yml
+        VARS_FILES: vars/foundations/((foundation))/vars/director.yml
 - name: opsman-custom-vm-extensions
   serial: true
   serial_groups:
@@ -462,8 +565,8 @@ jobs:
         config: configuration
         vars: configuration
       params:
-        CONFIG_PATHS: config/envs/((foundation))/opsman config/envs/((foundation))/products
-        VARS_PATHS: vars/envs/((foundation))/generated-vars vars/envs/((foundation))/vars
+        CONFIG_PATHS: config/foundations/((foundation))/opsman
+        VARS_PATHS: vars/foundations/((foundation))/generated-vars vars/foundations/((foundation))/vars
       output_mapping:
         tasks: platform-automation-tasks
     - task: prepare_custom_tasks_with_secrets
@@ -474,8 +577,8 @@ jobs:
         config: configuration
         vars: configuration
       params:
-        CONFIG_PATHS: config/envs/((foundation))/opsman config/envs/((foundation))/products
-        VARS_PATHS: vars/envs/((foundation))/generated-vars vars/envs/((foundation))/vars
+        CONFIG_PATHS: config/foundations/((foundation))/opsman
+        VARS_PATHS: vars/foundations/((foundation))/generated-vars vars/foundations/((foundation))/vars
         TASKS_PATH: tasks/tasks
       output_mapping:
         tasks: pipelines
@@ -485,7 +588,7 @@ jobs:
       input_mapping:
         env: configuration
       params:
-        ENV_FILE: envs/((foundation))/opsman/env.yml
+        ENV_FILE: foundations/((foundation))/opsman/env.yml
 - name: apply-director-changes
   serial: true
   serial_groups:
@@ -517,8 +620,8 @@ jobs:
         config: configuration
         vars: configuration
       params:
-        CONFIG_PATHS: config/envs/((foundation))/opsman config/envs/((foundation))/products
-        VARS_PATHS: vars/envs/((foundation))/generated-vars vars/envs/((foundation))/vars
+        CONFIG_PATHS: config/foundations/((foundation))/opsman
+        VARS_PATHS: vars/foundations/((foundation))/generated-vars vars/foundations/((foundation))/vars
       output_mapping:
         tasks: platform-automation-tasks
     - task: prepare_custom_tasks_with_secrets
@@ -529,8 +632,8 @@ jobs:
         config: configuration
         vars: configuration
       params:
-        CONFIG_PATHS: config/envs/((foundation))/opsman config/envs/((foundation))/products
-        VARS_PATHS: vars/envs/((foundation))/generated-vars vars/envs/((foundation))/vars
+        CONFIG_PATHS: config/foundations/((foundation))/opsman
+        VARS_PATHS: vars/foundations/((foundation))/generated-vars vars/foundations/((foundation))/vars
         TASKS_PATH: tasks/tasks
       output_mapping:
         tasks: pipelines
@@ -540,7 +643,7 @@ jobs:
       input_mapping:
         env: configuration
       params:
-        ENV_FILE: envs/((foundation))/opsman/env.yml
+        ENV_FILE: foundations/((foundation))/opsman/env.yml
     - put: pipeline-trigger-version-git
       params:
         file: pipeline-trigger-version-git/version
@@ -573,8 +676,8 @@ jobs:
         config: configuration
         vars: configuration
       params:
-        CONFIG_PATHS: config/envs/((foundation))/opsman config/envs/((foundation))/products
-        VARS_PATHS: vars/envs/((foundation))/generated-vars vars/envs/((foundation))/vars
+        CONFIG_PATHS: config/foundations/((foundation))/opsman
+        VARS_PATHS: vars/foundations/((foundation))/generated-vars vars/foundations/((foundation))/vars
       output_mapping:
         tasks: platform-automation-tasks
     - task: prepare_custom_tasks_with_product_version
@@ -586,7 +689,7 @@ jobs:
         config: opsman-version-git
       params:
         CONFIG_PATHS: config
-        VARS_PATHS: vars/envs/((foundation))/generated-vars vars/envs/((foundation))/vars
+        VARS_PATHS: vars/foundations/((foundation))/generated-vars vars/foundations/((foundation))/vars
         TASKS_PATH: tasks/tasks
       output_mapping:
         tasks: pipelines
@@ -603,7 +706,7 @@ jobs:
       input_mapping:
         env: configuration
       params:
-        ENV_FILE: envs/((foundation))/opsman/env.yml
+        ENV_FILE: foundations/((foundation))/opsman/env.yml
         INSTALLATION_FILE: ((foundation))-installation-$timestamp.zip
     - task: upgrade-opsman
       image: platform-automation-image
@@ -615,11 +718,11 @@ jobs:
         env: configuration
         vars: configuration
       params:
-        ENV_FILE: envs/((foundation))/opsman/env.yml
-        STATE_FILE: envs/((foundation))/state/state.yml
-        INSTALLATION_FILE: envs/((foundation))-installation*.zip
-        OPSMAN_CONFIG_FILE: envs/((foundation))/opsman/opsman.yml
-        VARS_FILES: vars/envs/((foundation))/vars/opsman.yml
+        ENV_FILE: foundations/((foundation))/opsman/env.yml
+        STATE_FILE: foundations/((foundation))/state/state.yml
+        INSTALLATION_FILE: foundations/((foundation))-installation*.zip
+        OPSMAN_CONFIG_FILE: foundations/((foundation))/opsman/opsman.yml
+        VARS_FILES: vars/foundations/((foundation))/vars/opsman.yml
       ensure:
         do:
         - task: opsman_state_make_commit
@@ -632,7 +735,7 @@ jobs:
             repository-commit: configuration-commit
           params:
             FILE_SOURCE_PATH: state.yml
-            FILE_DESTINATION_PATH: envs/((foundation))/state/state.yml
+            FILE_DESTINATION_PATH: foundations/((foundation))/state/state.yml
             GIT_AUTHOR_EMAIL: ((git.user.email))
             GIT_AUTHOR_NAME: ((git.user.username))
             COMMIT_MESSAGE: Update from upgrade-opsman
@@ -669,8 +772,8 @@ jobs:
         config: configuration
         vars: configuration
       params:
-        CONFIG_PATHS: config/envs/((foundation))/opsman config/envs/((foundation))/products
-        VARS_PATHS: vars/envs/((foundation))/generated-vars vars/envs/((foundation))/vars
+        CONFIG_PATHS: config/foundations/((foundation))/opsman
+        VARS_PATHS: vars/foundations/((foundation))/generated-vars vars/foundations/((foundation))/vars
       output_mapping:
         tasks: platform-automation-tasks
     - task: prepare_custom_tasks_with_product_version
@@ -682,7 +785,7 @@ jobs:
         config: opsman-version-git
       params:
         CONFIG_PATHS: config
-        VARS_PATHS: vars/envs/((foundation))/generated-vars vars/envs/((foundation))/vars
+        VARS_PATHS: vars/foundations/((foundation))/generated-vars vars/foundations/((foundation))/vars
         TASKS_PATH: tasks/tasks
       output_mapping:
         tasks: pipelines
@@ -692,7 +795,7 @@ jobs:
       input_mapping:
         env: configuration
       params:
-        ENV_FILE: envs/((foundation))/opsman/env.yml
+        ENV_FILE: foundations/((foundation))/opsman/env.yml
         INSTALLATION_FILE: ((foundation))-installation-$timestamp.zip
     - put: installation
       params:
@@ -722,8 +825,8 @@ jobs:
         config: configuration
         vars: configuration
       params:
-        CONFIG_PATHS: config/envs/((foundation))/opsman config/envs/((foundation))/products
-        VARS_PATHS: vars/envs/((foundation))/generated-vars vars/envs/((foundation))/vars
+        CONFIG_PATHS: config/foundations/((foundation))/opsman
+        VARS_PATHS: vars/foundations/((foundation))/generated-vars vars/foundations/((foundation))/vars
         TASKS_PATH: tasks/tasks
       output_mapping:
         tasks: pipelines
@@ -735,7 +838,7 @@ jobs:
         env: configuration
         vars: configuration
       params:
-        ENV_FILE: envs/((foundation))/opsman/env.yml
+        ENV_FILE: foundations/((foundation))/opsman/env.yml
         SUBSTITUTE_CREDENTIALS_WITH_PLACEHOLDERS: false
 - name: bbr-backup-director
   serial: true
@@ -764,8 +867,8 @@ jobs:
         config: configuration
         vars: configuration
       params:
-        CONFIG_PATHS: config/envs/((foundation))/opsman config/envs/((foundation))/products
-        VARS_PATHS: vars/envs/((foundation))/generated-vars vars/envs/((foundation))/vars
+        CONFIG_PATHS: config/foundations/((foundation))/opsman
+        VARS_PATHS: vars/foundations/((foundation))/generated-vars vars/foundations/((foundation))/vars
         TASKS_PATH: tasks/tasks
       output_mapping:
         tasks: pipelines
@@ -775,14 +878,14 @@ jobs:
         bbr-release: bbr-release-pivnets
         config: configuration
       params:
-        ENV_FILE: envs/((foundation))/opsman/env.yml
+        ENV_FILE: foundations/((foundation))/opsman/env.yml
     - task: bbr-backup
       file: pipelines/tasks/bbr-backup-director.yml
       input_mapping:
         bbr-release: bbr-release-pivnet
         config: configuration
       params:
-        ENV_FILE: envs/((foundation))/opsman/env.yml
+        ENV_FILE: foundations/((foundation))/opsman/env.yml
         FOUNDATION: ((foundation))
       on_failure:
         task: bbr-cleanup
@@ -791,7 +894,7 @@ jobs:
           bbr-release: bbr-release-pivnets
           config: configuration
         params:
-          ENV_FILE: envs/((foundation))/opsman/env.yml
+          ENV_FILE: foundations/((foundation))/opsman/env.yml
     - put: bbr-director-backup-bucket
       params:
         file: backup-artifact/((foundation))-director-backup_*.tgz
@@ -824,8 +927,8 @@ jobs:
         config: configuration
         vars: configuration
       params:
-        CONFIG_PATHS: config/envs/((foundation))/opsman config/envs/((foundation))/products
-        VARS_PATHS: vars/envs/((foundation))/generated-vars vars/envs/((foundation))/vars
+        CONFIG_PATHS: config/foundations/((foundation))/opsman
+        VARS_PATHS: vars/foundations/((foundation))/generated-vars vars/foundations/((foundation))/vars
       output_mapping:
         tasks: platform-automation-tasks
     - task: delete-vm
@@ -836,9 +939,9 @@ jobs:
         state: opsman_vm_state
         vars: configuration
       params:
-        OPSMAN_CONFIG_FILE: envs/((foundation))/opsman/opsman.yml
-        VARS_FILES: vars/envs/((foundation))/vars/opsman.yml
-        STATE_FILE: envs/((foundation))/state/state.yml
+        OPSMAN_CONFIG_FILE: foundations/((foundation))/opsman/opsman.yml
+        VARS_FILES: vars/foundations/((foundation))/vars/opsman.yml
+        STATE_FILE: foundations/((foundation))/state/state.yml
       ensure:
         do:
         - task: opsman_state_make_commit
@@ -851,7 +954,7 @@ jobs:
             repository-commit: configuration-commit
           params:
             FILE_SOURCE_PATH: state.yml
-            FILE_DESTINATION_PATH: envs/((foundation))/state/state.yml
+            FILE_DESTINATION_PATH: foundations/((foundation))/state/state.yml
             GIT_AUTHOR_EMAIL: ((git.user.email))
             GIT_AUTHOR_NAME: ((git.user.username))
             COMMIT_MESSAGE: Update from upgrade-opsman
@@ -882,8 +985,8 @@ jobs:
         config: configuration
         vars: configuration
       params:
-        CONFIG_PATHS: config/envs/((foundation))/opsman config/envs/((foundation))/products
-        VARS_PATHS: vars/envs/((foundation))/generated-vars vars/envs/((foundation))/vars
+        CONFIG_PATHS: config/foundations/((foundation))/opsman
+        VARS_PATHS: vars/foundations/((foundation))/generated-vars vars/foundations/((foundation))/vars
       output_mapping:
         tasks: platform-automation-tasks
     - task: delete-installation
@@ -892,7 +995,7 @@ jobs:
       input_mapping:
         config: configuration
       params:
-        ENV_FILE: envs/((foundation))/opsman/env.yml
+        ENV_FILE: foundations/((foundation))/opsman/env.yml
 - name: install-and-patch-pks
   serial: true
   serial_groups:
