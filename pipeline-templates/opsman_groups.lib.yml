@@ -6,9 +6,9 @@
 - name: main
   jobs:
     #@overlay/append by=overlay.index(0)
-    - bootstrap-generate-domain-certificate
+#    - bootstrap-generate-domain-certificate
     #@overlay/append by=overlay.index(0)
-    - bootstrap-save-domain-certificate-to-credhub
+#    - bootstrap-save-domain-certificate-to-credhub
     #@overlay/append by=overlay.index(0)
     - install-opsman
     #@overlay/append by=overlay.index(0)
@@ -31,8 +31,8 @@
 #@overlay/match by="name",missing_ok=True
 - name: opsman
   jobs:
-    - bootstrap-generate-domain-certificate
-    - bootstrap-save-domain-certificate-to-credhub
+#    - bootstrap-generate-domain-certificate
+#    - bootstrap-save-domain-certificate-to-credhub
     - install-opsman
     - configure-opsman-authentication
     - configure-director
@@ -50,8 +50,8 @@
     - extract-director-config
     - export-installation
     - bbr-backup-director
-    - bootstrap-generate-domain-certificate
-    - bootstrap-save-domain-certificate-to-credhub
+#    - bootstrap-generate-domain-certificate
+#    - bootstrap-save-domain-certificate-to-credhub
 
 #@overlay/match by="name",missing_ok=True
 - name: opsman-delete
