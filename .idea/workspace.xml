@@ -20,37 +20,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="a74f0e74-944c-4ce7-98f1-3bfa4b4bdb8d" name="Default" comment="">
-      <change afterPath="$PROJECT_DIR$/foundations/pez/download-products/pks.yml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/foundations/pez/generated-products/pks.yml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/foundations/pez/generated-vars/healthwatch.yml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/foundations/pez/generated-vars/pks.yml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/foundations/pez/opsman/.gitkeep" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/foundations/pez/opsman/auth-ldap.yml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/foundations/pez/opsman/auth-saml.yml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/foundations/pez/opsman/auth.yml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/foundations/pez/opsman/director.yml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/foundations/pez/opsman/env.yml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/foundations/pez/opsman/opsman.yml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/foundations/pez/pipeline-vars/params.yml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/foundations/pez/pipeline-vars/set-credhub.sh" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/foundations/pez/products/pks.yml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/foundations/pez/state/.gitkeep" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/foundations/pez/state/state.yml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/foundations/pez/vars/.gitkeep" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/foundations/pez/vars/cf.yml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/foundations/pez/vars/director.yml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/foundations/pez/vars/opsman.yml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/foundations/pez/vars/pks.yml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/foundations/pez/vars/tas.yml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/foundations/pez/vars/versions.yml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/foundations/pez/versions.yml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/pipeline-template/opsman_groups.lib.yml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/pipeline-template/pipeline-pks.yml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/pipeline-template/pks_products_groups.lib.yml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/pipeline-template/pks_products_jobs.lib.yml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/pipeline-template/pks_products_resources.lib.yml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pks-pipeline.sh" beforeDir="false" afterPath="$PROJECT_DIR$/pks-pipeline.sh" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/generated-pipeline-pks.yml" beforeDir="false" afterPath="$PROJECT_DIR$/generated-pipeline-pks.yml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -138,10 +108,11 @@
     <option name="oldMeFiltersMigrated" value="true" />
   </component>
   <component name="WindowStateProjectService">
-    <state x="613" y="250" width="799" height="548" key="find.popup" timestamp="1591838401941">
-      <screen x="0" y="23" width="1680" height="985" />
+    <state x="613" y="250" width="799" height="548" key="find.popup" timestamp="1591839774759">
+      <screen x="0" y="23" width="1680" height="984" />
     </state>
     <state x="613" y="249" width="799" height="548" key="find.popup/0.23.1680.982@0.23.1680.982" timestamp="1591814221368" />
+    <state x="613" y="250" width="799" height="548" key="find.popup/0.23.1680.984@0.23.1680.984" timestamp="1591839774759" />
     <state x="613" y="250" width="799" height="548" key="find.popup/0.23.1680.985@0.23.1680.985" timestamp="1591838401941" />
     <state x="0" y="148" key="new project wizard" timestamp="1591838366541">
       <screen x="0" y="23" width="1680" height="985" />
