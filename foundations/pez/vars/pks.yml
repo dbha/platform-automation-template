@@ -1,8 +1,27 @@
-network_name:
-pivotal-container-service_pks_tls_certificate:
-pivotal-container-service_pks_tls_privatekey:
-pks_api_hostname:
-plan1_selector_active_master_az_placement:
-plan1_selector_active_worker_az_placement:
+
+network_name: PKS-Services
+
+pks_api_hostname: api.pks.haas-466.pez.pivotal.io
+plan1_selector_active_master_az_placement: pks-az1
+plan1_selector_active_worker_az_placement: pks-az1
 service_network_name:
 singleton_availability_zone:
+network_selector_nsx_cloud-config-dns: 10.192.2.10,10.192.2.11
+network_selector_nsx_floating-ip-pool-ids: a1ccb31c-ed45-42aa-9fc2-7b8594aa5ab5
+network_selector_nsx_ip-block-id: 8ac4586b-2afa-414f-829b-f466f23208e4
+network_selector_nsx_lb_size_large_supported: true
+network_selector_nsx_lb_size_medium_supported: true
+network_selector_nsx_nat_mode: true
+network_selector_nsx_ncp-ha-heartbeat-period: 6
+network_selector_nsx_ncp-ha-master-timeout: 18
+network_selector_nsx_ncp-ha-update-timeout: 12
+network_selector_nsx_network_automation: true
+network_selector_nsx_nodes-ip-block-id: 9b497e89-dac9-44b0-998a-3d81d5522b1d
+network_selector_nsx_nsx-t-host: nsxmgr-01.haas-466.pez.pivotal.io
+network_selector_nsx_nsx-t-insecure: false
+#network_selector_nsx_nsx-t-superuser-certificate_certificate
+#network_selector_nsx_nsx-t-superuser-certificate_privatekey
+network_selector_nsx_service_cluster_cidr: 10.100.200.0/24
+network_selector_nsx_t0-router-id: 1edceffc-4dc8-4ee7-970d-4a9547b8f2f5
+network_selector_nsx_vcenter_cluster: Cluster
+
