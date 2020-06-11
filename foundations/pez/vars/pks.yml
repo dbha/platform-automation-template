@@ -1,5 +1,5 @@
 
-network_name: PKS-Services
+network_name: ondemand-network
 
 pks_api_hostname: api.pks.haas-466.pez.pivotal.io
 plan1_selector_active_master_az_placement: pks-az1

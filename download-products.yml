@@ -20,7 +20,7 @@ resources:
     source:
       private_key: ((git.private_key))
       uri: ((git.platform_automation_pipelines.uri))
-      branch: master
+      branch: ((git.platform_automation_configs.branch))
 
   - name: platform-automation-tasks
     type: s3
@@ -49,7 +49,7 @@ resources:
     source:
       private_key: ((git.private_key))
       uri: ((git.platform_automation_configs.uri))
-      branch: master
+      branch: ((git.platform_automation_configs.branch))
 
   - name: opsman-product
     type: s3
@@ -60,6 +60,19 @@ resources:
       region_name: ((s3.region_name))
       secret_access_key: ((s3.secret_access_key))
       regexp: "ops-manager-vsphere-*(.*).*"
+      skip_ssl_verification: true
+
+
+
+  - name: stemcell-repo
+    type: s3
+    source:
+      endpoint: ((s3.endpoint))
+      access_key_id: ((s3.access_key_id))
+      bucket: ((s3.buckets.pivnet_products))
+      region_name: ((s3.region_name))
+      secret_access_key: ((s3.secret_access_key))
+      regexp: bosh-stemcell-(.*)-*.*\.tgz
       skip_ssl_verification: true
 
 
@@ -96,8 +109,20 @@ resources:
       secret_access_key: ((s3.secret_access_key))
       regexp: p-healthwatch-(.*).pivotal
       skip_ssl_verification: true
+  #
+  #- name: healthwatch-stemcell
+  #  type: s3
+  #  source:
+  #    endpoint: ((s3.endpoint))
+  #    access_key_id: ((s3.access_key_id))
+  #    bucket: ((s3.buckets.pivnet_products))
+  #    region_name: ((s3.region_name))
+  #    secret_access_key: ((s3.secret_access_key))
+  #    regexp: bosh-stemcell-(.*)-vsphere.*\.tgz
+  #    skip_ssl_verification: true
 
-  - name: healthwatch-stemcell
+
+  - name: pks-product
     type: s3
     source:
       endpoint: ((s3.endpoint))
@@ -105,15 +130,27 @@ resources:
       bucket: ((s3.buckets.pivnet_products))
       region_name: ((s3.region_name))
       secret_access_key: ((s3.secret_access_key))
-      regexp: bosh-stemcell-(.*)-vsphere.*\.tgz
+      regexp: pivotal-(.*).pivotal
       skip_ssl_verification: true
 
+
+
+  - name: nsxt-product
+    type: s3
+    source:
+      endpoint: ((s3.endpoint))
+      access_key_id: ((s3.access_key_id))
+      bucket: ((s3.buckets.pivnet_products))
+      region_name: ((s3.region_name))
+      secret_access_key: ((s3.secret_access_key))
+      regexp: VMware-NSX-T-(.*).pivotal
+      skip_ssl_verification: true
 
 
 # reusable stuff
 credhub_interpolate: &credhub_interpolate
   image: platform-automation-image
-  file: platform-automation-tasks/tasks/credhub_interpolate.yml
+  file: platform-automation-tasks/tasks/credhub-interpolate.yml
   input_mapping:
     files: configuration
   output_mapping:
@@ -129,7 +166,7 @@ credhub_interpolate: &credhub_interpolate
 
 prepare_tasks_with_secrets: &prepare_tasks_with_secrets
   image: platform-automation-image
-  file: platform-automation-tasks/tasks/prepare_tasks_with_secrets.yml
+  file: platform-automation-tasks/tasks/prepare-tasks-with-secrets.yml
   input_mapping:
     tasks: platform-automation-tasks
     config: configuration
@@ -250,7 +287,6 @@ jobs:
               file: downloaded-stemcell/*.tgz
 
 
-
   - name: fetch-healthwatch
     serial: true
     serial_groups: [serial-jobs]
@@ -279,6 +315,69 @@ jobs:
           - put: healthwatch-product
             params:
               file: downloaded-product/*.pivotal
-          - put: healthwatch-stemcell
+          - put: stemcell-repo
             params:
               file: downloaded-stemcell/*.tgz
+
+
+  - name: fetch-pks
+    serial: true
+    serial_groups: [serial-jobs]
+    plan:
+      - in_parallel:
+          - get: platform-automation-image
+            params:
+              unpack: true
+          - get: platform-automation-tasks
+            params:
+              unpack: true
+          - get: configuration
+
+      - task: prepare_tasks_with_secrets
+        <<: *prepare_tasks_with_secrets
+
+      - task: download-product-and-stemcell
+        image: platform-automation-image
+        file: platform-automation-tasks/tasks/download-product.yml
+        params:
+          CONFIG_FILE: foundations/((foundation))/download-products/pks.yml
+        input_mapping:
+          config: configuration
+
+      - in_parallel:
+          - put: pks-product
+            params:
+              file: downloaded-product/*.pivotal
+          - put: stemcell-repo
+            params:
+              file: downloaded-stemcell/*.tgz
+
+
+  - name: fetch-nsxt
+    serial: true
+    serial_groups: [serial-jobs]
+    plan:
+      - in_parallel:
+          - get: platform-automation-image
+            params:
+              unpack: true
+          - get: platform-automation-tasks
+            params:
+              unpack: true
+          - get: configuration
+
+      - task: prepare_tasks_with_secrets
+        <<: *prepare_tasks_with_secrets
+
+      - task: download-product-and-stemcell
+        image: platform-automation-image
+        file: platform-automation-tasks/tasks/download-product.yml
+        params:
+          CONFIG_FILE: foundations/((foundation))/download-products/nsxt.yml
+        input_mapping:
+          config: configuration
+
+      - in_parallel:
+          - put: nsxt-product
+            params:
+              file: downloaded-product/*.pivotal
