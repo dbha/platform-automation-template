@@ -1,4 +1,3 @@
-
 #!/bin/bash
 
 if [ -z $1 ] || [ -z $2 ] ; then
@@ -13,4 +12,4 @@ FOUNDATION=$2
 fly -t ${FLY_TARGET} sp -p "${FOUNDATION}-download-products" \
 -c ./download-products.yml \
 -v foundation=${FOUNDATION} \
--l ./envs/${FOUNDATION}/pipeline-vars/params.yml
+-l ./foundations/${FOUNDATION}/pipeline-vars/params.yml

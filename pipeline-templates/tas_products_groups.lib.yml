@@ -1,0 +1,20 @@
+
+#@ def tas_products_groups():
+
+- name: main
+  jobs:
+  - install-and-patch-tas
+  - configure-tas-only
+  - apply-change-tas
+  - bbr-backup-tas
+  - test
+
+- name: tas
+  jobs:
+  - install-and-patch-tas
+  - configure-tas-only
+  - apply-change-tas
+  - bbr-backup-tas
+  - test
+
+#@ end
