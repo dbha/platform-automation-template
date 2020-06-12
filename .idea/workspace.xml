@@ -19,7 +19,10 @@
     <select />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="a74f0e74-944c-4ce7-98f1-3bfa4b4bdb8d" name="Default" comment="" />
+    <list default="true" id="a74f0e74-944c-4ce7-98f1-3bfa4b4bdb8d" name="Default" comment="">
+      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -41,7 +44,7 @@
   </component>
   <component name="PropertiesComponent">
     <property name="jdk.selected.JAVA_MODULE" value="1.8" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/foundations/pez" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
     <property name="project.structure.last.edited" value="Libraries" />
     <property name="project.structure.proportion" value="0.0" />
     <property name="project.structure.side.proportion" value="0.0" />
@@ -106,10 +109,10 @@
     <option name="oldMeFiltersMigrated" value="true" />
   </component>
   <component name="WindowStateProjectService">
-    <state x="321" y="145" width="981" height="548" key="find.popup" timestamp="1591865221092">
-      <screen x="0" y="23" width="1680" height="985" />
+    <state x="613" y="249" width="799" height="548" key="find.popup" timestamp="1591928022496">
+      <screen x="0" y="23" width="1680" height="982" />
     </state>
-    <state x="613" y="249" width="799" height="548" key="find.popup/0.23.1680.982@0.23.1680.982" timestamp="1591814221368" />
+    <state x="613" y="249" width="799" height="548" key="find.popup/0.23.1680.982@0.23.1680.982" timestamp="1591928022496" />
     <state x="613" y="250" width="799" height="576" key="find.popup/0.23.1680.984@0.23.1680.984" timestamp="1591848567127" />
     <state x="321" y="145" width="981" height="548" key="find.popup/0.23.1680.985@0.23.1680.985" timestamp="1591865221092" />
     <state x="0" y="148" key="new project wizard" timestamp="1591838366541">
