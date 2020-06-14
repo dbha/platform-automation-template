@@ -1,34 +1,25 @@
-errand-config:
-  clone-db:
-    post-deploy-state: ((clone-db_post_deploy_state))
-  delete-all-clusters:
-    pre-delete-state: ((delete-all-clusters_pre_delete_state))
-  pks-nsx-t-precheck:
-    post-deploy-state: ((pks-nsx-t-precheck_post_deploy_state))
-  smoke-tests:
-    post-deploy-state: ((smoke-tests_post_deploy_state))
-  upgrade-all-service-instances:
-    post-deploy-state: ((upgrade-all-service-instances_post_deploy_state))
-  wavefront-alert-creation:
-    post-deploy-state: ((wavefront-alert-creation_post_deploy_state))
-  wavefront-alert-deletion:
-    pre-delete-state: ((wavefront-alert-deletion_pre_delete_state))
-network-properties:
-  network:
-    name: ((network_name))
-  other_availability_zones:
-    - name: ((singleton_availability_zone))
-  service_network:
-    name: ((service_network_name))
-  singleton_availability_zone:
-    name: ((singleton_availability_zone))
-
 product-name: pivotal-container-service
 product-properties:
   .pivotal-container-service.pks_tls:
     value:
       cert_pem: ((pivotal-container-service_pks_tls.certificate))
       private_key_pem: ((pivotal-container-service_pks_tls.private_key))
+  .properties.cloud_provider:
+    selected_option: vsphere
+    value: vSphere
+  .properties.cloud_provider.vsphere.vcenter_dc:
+    value: Datacenter
+  .properties.cloud_provider.vsphere.vcenter_ds:
+    value: LUN01
+  .properties.cloud_provider.vsphere.vcenter_ip:
+    value: vcsa-01.haas-466.pez.pivotal.io
+  .properties.cloud_provider.vsphere.vcenter_master_creds:
+    value:
+      identity: ((iaas-configurations_0_vcenter_username))
+      password: ((iaas-configurations_0_vcenter_password))
+  .properties.cloud_provider.vsphere.vcenter_vms:
+    value: bosh_vms
+
   .properties.log_sink_resources_deploy:
     value: ((log_sink_resources_deploy))
   .properties.metric_sink_resources_deploy:
@@ -140,38 +131,17 @@ product-properties:
     value: Plan Inactive
   .properties.plan13_selector:
     value: Plan Inactive
-  .properties.proxy_selector:
-    value: Disabled
-  .properties.syslog_selector:
-    value: disabled
-  .properties.telegraf_selector:
-    value: disabled
-  .properties.telemetry_selector:
-    value: enabled
-  .properties.telemetry_selector.enabled.billing_polling_interval:
-    value: ((telemetry_selector_enabled_billing_polling_interval))
-  .properties.telemetry_selector.enabled.environment_provider:
-    value: ((telemetry_selector_enabled_environment_provider))
-  .properties.telemetry_selector.enabled.telemetry_polling_interval:
-    value: ((telemetry_selector_enabled_telemetry_polling_interval))
-  .properties.telemetry_selector.enabled.telemetry_url:
-    value: ((telemetry_selector_enabled_telemetry_url))
-  .properties.tmc:
-    value: disabled
-  .properties.uaa:
-    value: internal
-  .properties.uaa_pks_cli_access_token_lifetime:
-    value: ((uaa_pks_cli_access_token_lifetime))
-  .properties.uaa_pks_cli_refresh_token_lifetime:
-    value: ((uaa_pks_cli_refresh_token_lifetime))
-  .properties.uaa_pks_cluster_client_access_token_lifetime:
-    value: ((uaa_pks_cluster_client_access_token_lifetime))
-  .properties.uaa_pks_cluster_client_refresh_token_lifetime:
-    value: ((uaa_pks_cluster_client_refresh_token_lifetime))
-  .properties.wavefront:
-    value: disabled
-  .properties.worker_max_in_flight:
-    value: ((worker_max_in_flight))
+
+network-properties:
+  network:
+    name: ((network_name))
+  other_availability_zones:
+    - name: ((singleton_availability_zone))
+  service_network:
+    name: ((service_network_name))
+  singleton_availability_zone:
+    name: ((singleton_availability_zone))
+
 resource-config:
   pivotal-container-service:
     instance_type:
@@ -189,3 +159,19 @@ resource-config:
       size_mb: ((pks-db_persistent_disk_size))
     instances: automatic
     swap_as_percent_of_memory_size: automatic
+
+errand-config:
+  clone-db:
+    post-deploy-state: ((clone-db_post_deploy_state))
+  delete-all-clusters:
+    pre-delete-state: ((delete-all-clusters_pre_delete_state))
+  pks-nsx-t-precheck:
+    post-deploy-state: ((pks-nsx-t-precheck_post_deploy_state))
+  smoke-tests:
+    post-deploy-state: ((smoke-tests_post_deploy_state))
+  upgrade-all-service-instances:
+    post-deploy-state: ((upgrade-all-service-instances_post_deploy_state))
+  wavefront-alert-creation:
+    post-deploy-state: ((wavefront-alert-creation_post_deploy_state))
+  wavefront-alert-deletion:
+    pre-delete-state: ((wavefront-alert-deletion_pre_delete_state))
