@@ -24,3 +24,15 @@ network_selector_nsx_nsx-t-insecure: false
 network_selector_nsx_service_cluster_cidr: 10.100.200.0/24
 network_selector_nsx_t0-router-id: 1edceffc-4dc8-4ee7-970d-4a9547b8f2f5
 network_selector_nsx_vcenter_cluster: Cluster
+
+# ADD
+log_sink_resources_deploy: true
+metric_sink_resources_deploy: true
+node_exporter_deploy: false
+clone-db_post_deploy_state: true
+delete-all-clusters_pre_delete_state: false
+pks-nsx-t-precheck_post_deploy_state: false
+smoke-tests_post_deploy_state: false
+upgrade-all-service-instances_post_deploy_state: true
+wavefront-alert-creation_post_deploy_state: false
+wavefront-alert-deletion_pre_delete_state: false
