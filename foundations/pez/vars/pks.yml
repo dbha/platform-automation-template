@@ -1,7 +1,7 @@
 
 network_name: ondemand-network
 
-pks_api_hostname: api.pksdemo.net
+pks_api_hostname: pez-api.pksdemo.net
 plan1_selector_active_master_az_placement: [az1]
 plan1_selector_active_worker_az_placement: [az1]
 service_network_name: ondemand-network
