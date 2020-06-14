@@ -18,8 +18,6 @@ product-properties:
     value:
       identity: ((iaas-configurations_0_vcenter_username))
       password: ((iaas-configurations_0_vcenter_password))
-  .properties.cloud_provider.vsphere.vcenter_vms:
-    value: bosh_vms
 
   .properties.log_sink_resources_deploy:
     value: ((log_sink_resources_deploy))
@@ -132,6 +130,45 @@ product-properties:
     value: Plan Inactive
   .properties.plan13_selector:
     value: Plan Inactive
+
+  .properties.proxy_selector:
+    selected_option: disabled
+    value: Disabled
+  .properties.syslog_selector:
+    selected_option: disabled
+    value: disabled
+  .properties.telegraf_selector:
+    selected_option: disabled
+    value: disabled
+  .properties.telemetry_installation_purpose_selector:
+    selected_option: demo_or_poc
+    value: demo_or_poc
+  .properties.telemetry_selector:
+    selected_option: disabled
+    value: disabled
+  .properties.tmc:
+    selected_option: disabled
+    value: disabled
+
+  .properties.uaa:
+    selected_option: internal
+    value: internal
+  .properties.uaa_pks_cli_access_token_lifetime:
+    value: 600
+  .properties.uaa_pks_cli_refresh_token_lifetime:
+    value: 21600
+  .properties.uaa_pks_cluster_client_access_token_lifetime:
+    value: 600
+  .properties.uaa_pks_cluster_client_refresh_token_lifetime:
+    value: 21600
+  .properties.vm_extensions:
+    value:
+      - public_ip
+  .properties.wavefront:
+    selected_option: disabled
+    value: disabled
+  .properties.worker_max_in_flight:
+    value: 1
 
 network-properties:
   network:
