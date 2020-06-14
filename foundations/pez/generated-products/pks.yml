@@ -26,8 +26,8 @@ product-name: pivotal-container-service
 product-properties:
   .pivotal-container-service.pks_tls:
     value:
-      cert_pem: ((pivotal-container-service_pks_tls_certificate))
-      private_key_pem: ((pivotal-container-service_pks_tls_privatekey))
+      cert_pem: ((pivotal-container-service_pks_tls.certificate))
+      private_key_pem: ((pivotal-container-service_pks_tls.private_key))
   .properties.log_sink_resources_deploy:
     value: ((log_sink_resources_deploy))
   .properties.metric_sink_resources_deploy:
@@ -63,8 +63,8 @@ product-properties:
     value: ((network_selector_nsx_nsx-t-insecure))
   .properties.network_selector.nsx.nsx-t-superuser-certificate:
     value:
-      cert_pem: ((network_selector_nsx_nsx-t-superuser-certificate_certificate))
-      private_key_pem: ((network_selector_nsx_nsx-t-superuser-certificate_privatekey))
+      cert_pem: ((network_selector_nsx_nsx-t-superuser-certificate.certificate))
+      private_key_pem: ((network_selector_nsx_nsx-t-superuser-certificate.privat_key))
   .properties.network_selector.nsx.service_cluster_cidr:
     value: ((network_selector_nsx_service_cluster_cidr))
   .properties.network_selector.nsx.t0-router-id:
