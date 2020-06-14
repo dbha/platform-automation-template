@@ -84,6 +84,7 @@ product-properties:
     value: ((pks_api_hostname))
 
   .properties.plan1_selector:
+    selected_option: active
     value: Plan Active
   .properties.plan1_selector.active.description:
     value: ((plan1_selector_active_description))
@@ -99,6 +100,8 @@ product-properties:
     value: ((plan1_selector_active_worker_az_placement))
   .properties.plan1_selector.active.worker_instances:
     value: ((plan1_selector_active_worker_instances))
+  .properties.plan1_selector.active.allow_privileged_containers:
+    value: true
 
   .properties.plan1_selector.active.kubelet_drain_delete_local_data:
     value: true
