@@ -4,13 +4,14 @@ product-properties:
     value:
       cert_pem: ((pivotal-container-service_pks_tls.certificate))
       private_key_pem: ((pivotal-container-service_pks_tls.private_key))
+
   .properties.cloud_provider:
     selected_option: vsphere
     value: vSphere
   .properties.cloud_provider.vsphere.vcenter_dc:
     value: Datacenter
   .properties.cloud_provider.vsphere.vcenter_ds:
-    value: LUN01
+    value: 'LUN01'
   .properties.cloud_provider.vsphere.vcenter_ip:
     value: vcsa-01.haas-466.pez.pivotal.io
   .properties.cloud_provider.vsphere.vcenter_master_creds:
@@ -147,6 +148,16 @@ resource-config:
     instance_type:
       id: ((pivotal-container-service_instance_type))
     max_in_flight: ((pivotal-container-service_max_in_flight))
+    additional_networks: []
+    additional_vm_extensions: []
+    nsx:
+      lbs: []
+      security_groups: []
+    nsxt:
+      lb:
+        server_pools: []
+      ns_groups: []
+      vif_type: null
     persistent_disk:
       size_mb: ((pivotal-container-service_persistent_disk_size))
     instances: automatic
@@ -155,6 +166,16 @@ resource-config:
     instance_type:
       id: ((pks-db_instance_type))
     max_in_flight: ((pks-db_max_in_flight))
+    additional_networks: []
+    additional_vm_extensions: []
+    nsx:
+      lbs: []
+      security_groups: []
+    nsxt:
+      lb:
+        server_pools: []
+      ns_groups: []
+      vif_type: null
     persistent_disk:
       size_mb: ((pks-db_persistent_disk_size))
     instances: automatic
