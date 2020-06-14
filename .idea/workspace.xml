@@ -19,9 +19,9 @@
     <select />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="a74f0e74-944c-4ce7-98f1-3bfa4b4bdb8d" name="Default" comment="">
+    <list default="true" id="a74f0e74-944c-4ce7-98f1-3bfa4b4bdb8d" name="Default" comment="update">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/foundations/pez/generated-vars/pks.yml" beforeDir="false" afterPath="$PROJECT_DIR$/foundations/pez/generated-vars/pks.yml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/foundations/pez/products/pks.yml" beforeDir="false" afterPath="$PROJECT_DIR$/foundations/pez/products/pks.yml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -97,6 +97,14 @@
       <option name="presentableId" value="Default" />
       <updated>1591724779282</updated>
     </task>
+    <task id="LOCAL-00001" summary="update">
+      <created>1592115609182</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1592115609182</updated>
+    </task>
+    <option name="localTasksCounter" value="2" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -112,13 +120,18 @@
     <option name="oldMeFiltersMigrated" value="true" />
   </component>
   <component name="VcsManagerConfiguration">
-    <option name="LAST_COMMIT_MESSAGE" value="" />
+    <MESSAGE value="update" />
+    <option name="LAST_COMMIT_MESSAGE" value="update" />
   </component>
   <component name="WindowStateProjectService">
-    <state x="613" y="249" width="799" height="548" key="find.popup" timestamp="1592115430286">
+    <state x="487" y="276" key="Vcs.Push.Dialog.v2" timestamp="1592115620768">
       <screen x="0" y="23" width="1680" height="982" />
     </state>
-    <state x="613" y="249" width="799" height="548" key="find.popup/0.23.1680.982@0.23.1680.982" timestamp="1592115430286" />
+    <state x="487" y="276" key="Vcs.Push.Dialog.v2/0.23.1680.982@0.23.1680.982" timestamp="1592115620768" />
+    <state x="613" y="249" width="799" height="548" key="find.popup" timestamp="1592117097095">
+      <screen x="0" y="23" width="1680" height="982" />
+    </state>
+    <state x="613" y="249" width="799" height="548" key="find.popup/0.23.1680.982@0.23.1680.982" timestamp="1592117097095" />
     <state x="613" y="249" width="799" height="549" key="find.popup/0.23.1680.983@0.23.1680.983" timestamp="1591951866516" />
     <state x="613" y="250" width="799" height="576" key="find.popup/0.23.1680.984@0.23.1680.984" timestamp="1591848567127" />
     <state x="321" y="145" width="981" height="548" key="find.popup/0.23.1680.985@0.23.1680.985" timestamp="1591865221092" />
