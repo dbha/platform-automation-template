@@ -20,7 +20,6 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="a74f0e74-944c-4ce7-98f1-3bfa4b4bdb8d" name="Default" comment="update">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/foundations/pez/vars/pks.yml" beforeDir="false" afterPath="$PROJECT_DIR$/foundations/pez/vars/pks.yml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
