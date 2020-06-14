@@ -64,7 +64,7 @@ product-properties:
   .properties.network_selector.nsx.nsx-t-superuser-certificate:
     value:
       cert_pem: ((network_selector_nsx_nsx-t-superuser-certificate.certificate))
-      private_key_pem: ((network_selector_nsx_nsx-t-superuser-certificate.privat_key))
+      private_key_pem: ((network_selector_nsx_nsx-t-superuser-certificate.private_key))
   .properties.network_selector.nsx.service_cluster_cidr:
     value: ((network_selector_nsx_service_cluster_cidr))
   .properties.network_selector.nsx.t0-router-id:
