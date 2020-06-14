@@ -11,7 +11,7 @@ product-properties:
   .properties.cloud_provider.vsphere.vcenter_dc:
     value: Datacenter
   .properties.cloud_provider.vsphere.vcenter_ds:
-    value: 'LUN01'
+    value: LUN01
   .properties.cloud_provider.vsphere.vcenter_ip:
     value: vcsa-01.haas-466.pez.pivotal.io
   .properties.cloud_provider.vsphere.vcenter_master_creds:
@@ -192,7 +192,3 @@ errand-config:
     post-deploy-state: ((smoke-tests_post_deploy_state))
   upgrade-all-service-instances:
     post-deploy-state: ((upgrade-all-service-instances_post_deploy_state))
-  wavefront-alert-creation:
-    post-deploy-state: ((wavefront-alert-creation_post_deploy_state))
-  wavefront-alert-deletion:
-    pre-delete-state: ((wavefront-alert-deletion_pre_delete_state))
