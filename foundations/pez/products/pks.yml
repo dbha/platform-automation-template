@@ -82,6 +82,7 @@ product-properties:
     value: disabled
   .properties.pks_api_hostname:
     value: ((pks_api_hostname))
+
   .properties.plan1_selector:
     value: Plan Active
   .properties.plan1_selector.active.description:
@@ -98,6 +99,20 @@ product-properties:
     value: ((plan1_selector_active_worker_az_placement))
   .properties.plan1_selector.active.worker_instances:
     value: ((plan1_selector_active_worker_instances))
+
+  .properties.plan1_selector.active.kubelet_drain_delete_local_data:
+    value: true
+  .properties.plan1_selector.active.kubelet_drain_force:
+    value: true
+  .properties.plan1_selector.active.kubelet_drain_force_node:
+    value: false
+  .properties.plan1_selector.active.kubelet_drain_grace_period:
+    value: 10
+  .properties.plan1_selector.active.kubelet_drain_ignore_daemonsets:
+    value: true
+  .properties.plan1_selector.active.kubelet_drain_timeout:
+    value: 0
+
   .properties.plan2_selector:
     value: Plan Inactive
   .properties.plan3_selector:

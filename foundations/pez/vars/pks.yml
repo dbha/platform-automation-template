@@ -36,3 +36,9 @@ smoke-tests_post_deploy_state: false
 upgrade-all-service-instances_post_deploy_state: true
 wavefront-alert-creation_post_deploy_state: false
 wavefront-alert-deletion_pre_delete_state: false
+
+plan1_selector_active_max_worker_instances: 50
+plan1_selector_active_description: 'Example: This plan will configure a lightweight kubernetes cluster'
+plan1_selector_active_master_instances: 1
+plan1_selector_active_name: small
+plan1_selector_active_worker_instances: 3
