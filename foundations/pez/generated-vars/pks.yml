@@ -4,7 +4,7 @@ network_selector_flannel_pod_network_cidr: 10.200.0.0/16
 network_selector_flannel_service_cluster_cidr: 10.100.200.0/24
 node_exporter_deploy: false
 plan1_selector_active_allow_privileged_containers: false
-plan1_selector_active_description: 'Example: This plan will configure a lightweight kubernetes cluster. Not recommended for production workloads.'
+plan1_selector_active_description: 'Example: This plan will configure a lightweight kubernetes cluster'
 plan1_selector_active_kubelet_drain_delete_local_data: true
 plan1_selector_active_kubelet_drain_force: true
 plan1_selector_active_kubelet_drain_force_node: false
